@@ -1,31 +1,26 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  headers: async () => {
-    return [
-      {
-        source: "/:path*",
-        headers: [
-          {
-            key: "Cross-Origin-Opener-Policy",
-            value: "same-origin",
-          },
-          {
-            key: "Cross-Origin-Embedder-Policy",
-            value: "require-corp",
-          },
-          {
-            // Required for Monaco Editor
-            key: "Cross-Origin-Resource-Policy",
-            value: "cross-origin",
-          },
-        ],
-      },
-    ];
-  },
-
-  // Increase the webpack memory limit to prevent OOM issues
+  assetPrefix: "http://localhost:3000",
+  headers: async () => [
+    {
+      source: "/:path*",
+      headers: [
+        {
+          key: "Cross-Origin-Opener-Policy",
+          value: "same-origin",
+        },
+        {
+          key: "Cross-Origin-Embedder-Policy",
+          value: "require-corp",
+        },
+        {
+          key: "Cross-Origin-Resource-Policy",
+          value: "cross-origin",
+        },
+      ],
+    },
+  ],
   webpack: (config, { isServer }) => {
     config.performance = {
       ...config.performance,
@@ -33,7 +28,6 @@ const nextConfig: NextConfig = {
       maxEntrypointSize: 500000,
     };
 
-    // Handle Node.js modules for Monaco VSCode API
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
